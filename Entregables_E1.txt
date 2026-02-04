@@ -1,0 +1,22 @@
+Backend
+
+1.- Login O y el middleware de acceso
+2.-Plantilla
+3.-Catalogos
+4.-El controlador de la tienda, sin el proceso del guardado de la orden en la bd solo se va a imprimir
+
+FrontEnd
+1.-La tienda completa en VUE
+	Agregar un prodcuto a la orden de compra
+	Modificar un producto (Tamaño u otros atributos )
+	Eliminar un producto de la orden de compra
+	Limpiar la orden. Esto es eliminar todos los productos de una orden
+
+	Mostrar los productos del catálogo de la base de datos, imagenes es opcional pero si debe de haber por lo menos una de forma estatica
+
+	Cargar los catálogos del backend al front-end. Debe de usarse por lo menos una vez las dos formas de hacerlo.
+
+	Agregar extras a un articulo de la orden
+
+	Enviar la informacion de la orden al backend con peticion asincrona
+
