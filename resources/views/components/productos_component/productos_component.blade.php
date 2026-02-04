@@ -38,4 +38,4 @@
 <script src="{{ asset('galeria_arte/instance.js') }}">
 
 <script src="{{ asset('galeria_arte/producto_component/productos.js') }}"></script>
-         <script src="{{ asset('galeria_arte/finalizar_compra.js') }}"></script>
+<script src="{{ asset('galeria_arte/finalizar_compra.js') }}"></script>

@@ -48,4 +48,16 @@
       </div>
     </div>
   </body>
+
+  <!-- IMPORTANTE TENER EN EL MASTER TODOS LOS SCRIPTS
+      PERDI HORAS VIENDO QUE ERA Y ERA POR ESTO  
+  -->
+  <script src="{{ asset('galeria_arte/vue.js') }}"></script>
+
+    <script src="{{ asset('galeria_arte/instance.js') }}"></script>
+
+    <script src="{{ asset('galeria_arte/producto_component/productos.js') }}"></script>
+    <script src="{{ asset('galeria_arte/finalizar_compra.js') }}"></script>
 </html>
+
+
