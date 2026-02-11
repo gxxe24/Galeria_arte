@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tipos extends Model
+class Rol extends Model
 {
-    protected $table = "tipos";  
+    protected $table = "roles";
     public $timestamps = false;
 }

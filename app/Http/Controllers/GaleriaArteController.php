@@ -1,64 +1,91 @@
 <?php
 
 namespace App\Http\Controllers;
-use  App\Models\Productos;
-use  App\Models\Tipos;
+
+use App\Models\Productos;
+use App\Models\Tipos;
 use Illuminate\Http\Request;
+
 class GaleriaArteController extends Controller
 {
-    public function main()
-    {
-        $tipos=Tipos::all();
-        $data['tipos']=$tipos;
-        return view('components/master_coffee_shop')->with($data);
+
+    public function main(){
+    $tipos = Tipos::all();
+    
+
+    return view('components/galeria_paginaprincipal', ['tipos' => $tipos]);
     }
 
     function productos(){
-        $productos=Productos::all();
+        $productos = Productos::all();
         return response()->json($productos);
-        
-    }
-    function finalizar_pago(){
-        return view('components/pago');
     }
 
-function catalogo_productos() {
+
+
+
+
+
+    //============================//
+    /*
+        A PARTIR DE ACA ES EL
+        CATALOGO DE PRODUCTOS
     
-        $productos = Productos::join('tipo', 'productos.idtipo', '=', 'tipo.id')
-            ->select('productos.*', 'tipo.nombre as nombre_tipo') // Alias para no sobrescribir el nombre del producto
+    */
+    //===========================//
+    // Método para mostrar la vista (Index)
+    function catalogo_productos() {
+        // Mantenemos su consulta con JOIN para mostrar el nombre del tipo
+        $productos = Productos::join('tipos', 'productos.idtipo', '=', 'tipos.id')
+            ->select('productos.*', 'tipos.nombre as nombre_tipo')
             ->get();
 
-       
         $tipos = Tipos::all();
-        // dd($tipos);
 
-        return view('catalogo_productos', compact('productos', 'tipos'));
+        return view('productos.catalogo_productos', compact('productos', 'tipos'));
     }
 
-    public function guardar_producto(Request $request) {
-    $producto = new Productos();
-    $producto->idtipo = $request->idtipo;
-    $producto->nombre = $request->nombre;
-    $producto->precio = $request->precio;
-    $producto->descripcion = $request->descripcion;
-    $producto->foto = $request->foto; // Aquí podrías implementar lógica de subida de archivos
-    $producto->save();
 
-    return redirect()->back();
-}
-public function editar_producto(Request $request, $id) {
-    $producto = Productos::find($id);
-    $producto->idtipo = $request->idtipo;
-    $producto->nombre = $request->nombre;
-    $producto->precio = $request->precio;
-    $producto->descripcion = $request->descripcion;
-    $producto->foto = $request->foto;
-    $producto->save();
+    
+    // Este método centraliza TODA la lógica (Agregar, Editar, Eliminar)
+    function save(Request $r){
+        $context = $r->all();
+        // dd($context);
+        switch($context['operacion']){
+            
+            case 'Agregar':
+                $producto = new Productos();
+               
+                $producto->idtipo = $context['idtipo'];
+                $producto->nombre = $context['nombre'];
+                $producto->descripcion = $context['descripcion'];
+                $producto->precio = $context['precio'];
 
-    return redirect()->back();
-}
-public function eliminar_producto($id) {
-    Productos::destroy($id);
-    return redirect()->back();
-}
-}
+                // Manejo básico de foto si viene nulo
+                $producto->imagen = $context['foto'] ?? ''; 
+                $producto->save();
+                 
+                break;
+
+            case 'Editar':
+                $producto = Productos::find($context['id']);
+                $producto->idtipo = $context['idtipo'];
+                $producto->nombre = $context['nombre'];
+                $producto->precio = $context['precio'];
+                $producto->descripcion = $context['descripcion'];
+                // Solo actualiza foto si se envía algo nuevo, sino mantiene la anterior (lógica opcional)
+                if(!empty($context['foto'])) {
+                    $producto->foto = $context['foto'];
+                }
+                $producto->save();
+                break;
+
+            case 'Eliminar':
+                $producto = Productos::find($context['id']);
+                $producto->delete();
+                break;
+        }
+
+        return redirect()->route('Galeria.catalogo_productos');
+    }
+}   
